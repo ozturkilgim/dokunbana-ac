@@ -26,32 +26,42 @@ export default class MoneyReset extends React.Component {
     
     return (  
       <View onPress={() => {Keyboard.dismiss()}} style={styles.container}>
-      <Image onPress={() => {Keyboard.dismiss()}} style={{position: 'absolute'}} source={require('../assets/MainPage_background.png')}>
-      </Image>
-      <Image source={require('../assets/DokunBanaBeyaz.png')} style={{marginBottom: 50, width: 100, height: 100}} />
-      <Text style={{fontSize: 40, fontWeight: 'bold', marginBottom: 20, color: '#fff'}}>Merhaba, {this.state.username}! </Text>
-          <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('MoneyReset')}>
-          <Image style={{width: 24, height: 28}} source={require('../assets/money-bag.png')} />
-          <Text style={{fontSize: 30, fontWeight: 'bold', marginBottom: 20, color: '#fff'}}> Bakiye:     {this.state.StateMoney}₺ </Text>
-          </TouchableOpacity>
-          </View>
+      
+            <Image onPress={() => {Keyboard.dismiss()}} style={{position: 'absolute'}} source={require('../assets/MainPage_background.png')}/>
+            <Image source={require('../assets/DokunBanaBeyaz.png')} style={{marginBottom: 50, width: 100, height: 100}} />
+
+            <Text style={{fontSize: 40, fontWeight: 'bold', marginBottom: 20, color: '#fff'}}>Merhaba, {this.state.username}! </Text>
+
+            <View style={{flexDirection: 'row'}}>
+
+              <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('MoneyReset')}>
+              <Image style={{width: 24, height: 28}} source={require('../assets/money-bag.png')} />
+              <Text style={{fontSize: 30, fontWeight: 'bold', marginBottom: 20, color: '#fff'}}> Bakiye:     {this.state.StateMoney}₺ </Text>
+              </TouchableOpacity>
+
+            </View>
 
 
-          <View style={{flexDirection: 'row', justifyContent: 'center', width: 100, marginTop: 30,}}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 0, marginTop: 60, marginRight: 20, color: '#fff'}}>Sıradaki Oyun:</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'center', width: 100, marginTop: 30,}}>
+              <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 0, marginTop: 60, marginRight: 20, color: '#fff'}}>Sıradaki Oyun:</Text>
 
-          <ImageBackground style={styles.ImageStyle} source={require('../assets/NextGame.png')}>
-          <Text style={{fontSize: 28, fontWeight: 'bold', marginBottom: 15, marginTop: 70, marginLeft: 15, color: '#fff'}}>{this.state.GameMoney}₺</Text>
-          </ImageBackground>
+              <ImageBackground style={styles.ImageStyle} source={require('../assets/NextGame.png')}>
+              <Text style={{fontSize: 28, fontWeight: 'bold', marginBottom: 15, marginTop: 70, marginLeft: 15, color: '#fff'}}>{this.state.GameMoney}₺</Text>
+              </ImageBackground>
 
-          <Text style={{fontSize: 23, fontWeight: 'bold', marginBottom: 20, marginTop: 40, marginLeft: 25, color: '#fff'}}>28 Kasım 19.30</Text>
-          </View>
-          <ButtonBorderBig
-          ButtonText="Oyuna Başla"
-          onPress={() => this.ToGame()}
-          />
-         </View>
+              <Text style={{fontSize: 23, fontWeight: 'bold', marginBottom: 20, marginTop: 40, marginLeft: 25, color: '#fff'}}>28 Kasım 19.30</Text>
+            </View>
+           
+            <ButtonBorderBig
+            ButtonText="Oyuna Başla"
+            onPress={() => this.ToGame()}
+            />
+            <ButtonBorderBig
+            ButtonText="ScoreBoard"
+            onPress={() => this.props.navigation.navigate('ScoreBoard')}
+            />
+
+       </View>
     );
   }
 
@@ -65,50 +75,10 @@ export default class MoneyReset extends React.Component {
     }
   }
 
-  componentWillMount() {
-    if (firebase.auth().currentUser) {
-          
-      userId = firebase.auth().currentUser.uid;
-      if (userId) {
-        const UserRef = firebase.database().ref('users/' + userId);
-        const UserMoneyRef = UserRef.child('UserOwnMoney');
-        UserMoneyRef.on('value', snap => {
-              this.setState({
-              StateMoney: snap.val()
-              })
-            });
-        const UsernameRef = UserRef.child('username');
-        UsernameRef.on('value', snap => {
-          this.setState({
-          username: snap.val()
-          })
-        });
-        const GameRef = firebase.database().ref('Game');
-          const MoneyRef = GameRef.child('Money');
-          MoneyRef.on('value', snap => {
-          this.setState({
-          GameMoney: snap.val() })
-              });
-          
-          const GameTimeRef = GameRef.child('GameTime');
-          GameTimeRef.on('value', snap => {
-          this.setState({
-          GameTime: snap.val() })
-              });
-          const GameExistRef = GameRef.child('GameExist');
-          GameExistRef.on('value', snap => {
-          this.setState({
-            GameExist: snap.val() })
-              });
-              
-          }
-         }
-    }
     componentDidMount() {
       if (firebase.auth().currentUser) {
           
         userId = firebase.auth().currentUser.uid;
-        if (userId) {
           const UserRef = firebase.database().ref('users/' + userId);
           const UserMoneyRef = UserRef.child('UserOwnMoney');
           UserMoneyRef.on('value', snap => {
@@ -139,8 +109,6 @@ export default class MoneyReset extends React.Component {
             this.setState({
               GameExist: snap.val() })
                 });
-                
-            }
            }
     }
         

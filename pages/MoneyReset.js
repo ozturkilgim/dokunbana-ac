@@ -21,9 +21,7 @@ export default class MoneyReset extends React.Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;      
-    //if (this.state.user) return this.UserLoggedIn;
-    
+    const { navigate } = this.props.navigation;          
     return (  
       <View style={styles.container}>
           <Text style={styles.TextTitle}>Para Çekmek için Iban Numaranı Gir!</Text>

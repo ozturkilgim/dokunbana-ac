@@ -3,23 +3,14 @@ import {
     createStackNavigator,
     createAppContainer
   } from 'react-navigation';
-import ButtonScreen from '../pages/ButtonScreen';
 import OnTouchButton from '../pages/OnTouchButton';
-import LoginScreen from '../pages/LoginScreen';
-import SignUpScreen from '../pages/SignUpScreen'
-import SignUpPhone from '../pages/SignUpPhone';
-import SignUpUserName from '../pages/SignUpUserName';
-import WinScreen from '../pages/WinScreen';
-import FailScreen from '../pages/FailScreen';
+import SignUpAno from '../pages/SignUpAno';
 import MainScreen from '../pages/MainScreen';
 import MoneyReset from '../pages/MoneyReset';
-
+import ScoreBoard from '../pages/ScoreBoard';
 
   const MainTabNavigator = createStackNavigator(
   {
-    LoginScreen: {
-      screen: LoginScreen, 
-    },
     MoneyReset: {
       screen: MoneyReset,
       headerMode: 'screen',
@@ -30,14 +21,12 @@ import MoneyReset from '../pages/MoneyReset';
         left: <Left onPress={goBack} />,
       }),
     },
-    FailScreen: {
-      screen: FailScreen,
-      navigationOptions: {
-        gesturesEnabled: false,
+
+    SignUpAno: {
+      screen: SignUpAno
     },
-    },
-    SignUpPhone: {
-      screen: SignUpPhone
+    ScoreBoard: {
+      screen: ScoreBoard
     },
     MainScreen: {
       screen: MainScreen,
@@ -45,41 +34,16 @@ import MoneyReset from '../pages/MoneyReset';
         gesturesEnabled: false,
     },
     },
-    
-    WinScreen: {
-      screen: WinScreen,
-      navigationOptions: {
-        gesturesEnabled: false,
-    },
-    },
-    
-    Button: {
-      screen: ButtonScreen,
-      navigationOptions: {
-        gesturesEnabled: false,
-    },
-    },
-    
+
     OnTouchButton: {
       screen: OnTouchButton,
-      navigationOptions: {
+      navigationOptions: { 
         gesturesEnabled: false,
     },
     },
-    
-    SignUpScreen: {
-      screen: SignUpScreen
-    },
-    SignUpUserName: {
-      screen: SignUpUserName,
-      navigationOptions: {
-        gesturesEnabled: false,
-    },
-    },
-    
   },
   {
-    initialRouteName:  'SignUpPhone',
+    initialRouteName:  'SignUpAno',
     headerMode: 'none',
     navigationOptions: {
         headerVisible: false,

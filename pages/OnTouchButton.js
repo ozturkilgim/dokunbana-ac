@@ -1,37 +1,31 @@
 import React from 'react';
-import { StyleSheet,
+import { 
+  StyleSheet,
   Text,
   View,
   Image,
   TouchableOpacity,
-  TouchableHighlight,
   StatusBar  } from 'react-native';
 import * as firebase from 'firebase';
-import ButtonBorder from '../components/ButtonBorder';
 import ButtonBorderWin from '../components/ButtonBorderWin';
 
 
 export default class OnTouchButton extends React.Component {
+
   constructor(props) {
     super(props)
+
     this.state = { 
       timer: 0,
       score: 0,
       showCancel: true,
       onTouchStatus: false,
+
     }
   }
 
   static navigationOptions = {
-    //title: 'Welcome',
   };
-
- /* GameMoneyReset() {
-    this.setState({
-      GameMoney: 0,
-    });
-  }*/
-
 
 
   render() {
@@ -39,6 +33,7 @@ export default class OnTouchButton extends React.Component {
     const { navigate } = this.props.navigation;
 
       if (this.state.showCancel) {
+
         if(this.state.StartedGame==1 && this.state.onTouchStatus==false) {
           return (
             <View style={styles.container}>
@@ -54,8 +49,7 @@ export default class OnTouchButton extends React.Component {
   
               </View>
         );
-        }
-        else {
+        }else {
           return (
             <View style={styles.container}>
                   <Image style={{position: 'absolute'}} source={require('../assets/ButtonBackground.png')} />
@@ -78,29 +72,32 @@ export default class OnTouchButton extends React.Component {
                     <Text style={styles.countText}>
                     Butonu Sakın Bırakma!</Text>
                     
+                    
+                    
                     <TouchableOpacity style={styles.buttonShadow} onPress={() => this.setState({onTouchStatus: true})} onPressIn={this.onPressIn} onPressOut={this.onPressOut}>
                       <View style={styles.buttonstyle}>
                         <Image style={styles.imagestyle} source={require('../assets/Fingerprintbutton.png')} />
                       </View>
                     </TouchableOpacity>
+
           </View>
           ); 
-        }
-        
-     } 
-     else {
+        }   
+     }else {
   
       if (this.state.Win==true) {
         return (
           <View style={styles.container}>
-          <Image style={{position: 'absolute'}} source={require('../assets/ButtonBackground.png')} />
+
+                <Image style={{position: 'absolute'}} source={require('../assets/ButtonBackground.png')} />
+               
                 <Text style={styles.countText}>
                 {this.state.GameMoney}₺ Kazandın</Text>
                 
                 <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 15}}>
-                <Image style={{height: 25, width: 25}} source={require('../assets/time.png')} />
-                <Text style={styles.timerStyle}>Rekorun: {this.state.timer} saniye</Text>
-              </View>
+                  <Image style={{height: 25, width: 25}} source={require('../assets/time.png')} />
+                  <Text style={styles.timerStyle}>Rekorun: {this.state.timer} saniye</Text>
+                </View>
                 
 
                 <ButtonBorderWin
@@ -109,36 +106,46 @@ export default class OnTouchButton extends React.Component {
                  />
               
             </View>
-      );
-  
-      }
-      
-      else {
+        );
+
+      }else {
         return (
           <View style={styles.container}>
-          <Image style={{position: 'absolute'}} source={require('../assets/ButtonBackground.png')} />
-  
-            <Text style={styles.countText}>
-            Ne Yazık Ki Kaybettin!</Text>
 
-            <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 15}}>
-                <Image style={{height: 25, width: 25}} source={require('../assets/time.png')} />
-                <Text style={styles.timerStyle}>Rekorun: {this.state.timer} saniye</Text>
-                </View>
+            <Image style={{position: 'absolute'}} source={require('../assets/ButtonBackground.png')} />
+    
+              <Text style={styles.countText}>
+              Ne Yazık Ki Kaybettin!</Text>
 
-            <ButtonBorderWin
-            ButtonText="Ana Sayfa"
-            onPress={() => this.props.navigation.navigate('MainScreen')}
-            />
+              <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 15}}>
+                  <Image style={{height: 25, width: 25}} source={require('../assets/time.png')} />
+                  <Text style={styles.timerStyle}>Rekorun: {this.state.timer} saniye</Text>
+              </View>
+
+              <ButtonBorderWin
+              ButtonText="Ana Sayfa"
+              onPress={() => this.props.navigation.navigate('MainScreen')}
+              />
 
             </View>
-      );
-  
+        );
       }
-      
-     }  
+    }  
 
      
+  }
+  scoreBoardAddUser() {
+    const userId = firebase.auth().currentUser.uid;
+    const ScoreBoardRef = firebase.database().ref('ScoreBoard')
+    const GameIdRef = ScoreBoardRef.child(this.state.GameId)
+    GameIdRef.child(this.state.OnlineUserNumber).update({
+    
+      Rank: this.state.OnlineUserNumber,
+      userName: this.state.username,
+      userId
+
+    })
+    
   }
 
     Win() {
@@ -154,21 +161,19 @@ export default class OnTouchButton extends React.Component {
       onTouchStatus: true,
     });
     require('firebase/functions')
+    
     if (this.state.StartedGame==1) {
       this.setState({
         OnlineUserNumber: this.state.OnlineUserNumber + 1,
         OnPressIn: true,
         onTouchStatus: true,
       });
-      // require("firebase/functions");
-      // Required for side-effects
       addOnlineUser = firebase.functions().httpsCallable('addOnlineUser');
       addOnlineUser()
       .then(result => console.info(result))
       .catch(err => console.info('err :: ', err))
       
-      // functions.https.onCall((data, context) => {
-      //});
+      
     } else {
       addOnlineUser = firebase.functions().httpsCallable('addOnlineUser');
       addOnlineUser()
@@ -194,6 +199,7 @@ export default class OnTouchButton extends React.Component {
       subOnlineUser()
       .then(result => console.info(result))
       .catch(err => console.info('err :: ', err))
+
       
       clearInterval(this.myInterval) 
 
@@ -202,21 +208,17 @@ export default class OnTouchButton extends React.Component {
         this.setState({
           Win: true,
         });
-       /* 
-        console.log(userId)
-        firebase.database().ref('users/' + userId).set({
-          UserOwnMoney: this.state.GameMoney + this.state.NowMoney
-        })*/
 
         const userId = firebase.auth().currentUser.uid;
         const updates = {}; 
         updates['/users/' + userId + '/UserOwnMoney'] = this.state.GameMoney + this.state.NowMoney
         firebase.database().ref().update(updates)
-
+        this.scoreBoardAddUser()
       }else {
         this.setState({
           Win: false,
         });
+        this.scoreBoardAddUser()
       }
       this.state.timer==this.props.FinalScore
     }else {
@@ -243,6 +245,8 @@ export default class OnTouchButton extends React.Component {
       
         }
         else {
+         
+
           this.setState({
             GameDescription: "'da başladı! Butonu sakın bırakma!"})
         }
@@ -260,13 +264,20 @@ export default class OnTouchButton extends React.Component {
               this.setState({
               NowMoney: snap.val() })
             });  
-                       
+            
+             
           
           const GameRef = firebase.database().ref('Game');
           const MoneyRef = GameRef.child('Money');
           MoneyRef.on('value', snap => {
           this.setState({
           GameMoney: snap.val() })
+              });
+
+          const GameIdRef = GameRef.child('GameId');
+          GameIdRef.on('value', snap => {
+          this.setState({
+          GameId: snap.val() })
               });
 
           const StartedGameRef = GameRef.child('StartedGame');
@@ -286,22 +297,13 @@ export default class OnTouchButton extends React.Component {
           this.setState({
             GameExist: snap.val() })
               });
-
-             /* if (this.state.GameExist==1) {
-                if (this.state.StartedGame==0) {
-                firebase.database().ref('Game').update({
-                GameDescription: "'da başlayacak!"})
               
-                }
-                else {
-                  this.setState({
-                    GameDescription: "'da başladı! Butonu sakın bırakma!"})
-                }
-               
-              }
-              
-              else{
-              }*/
+              const UserNameRef = UserOnlineRef.child('username');
+              UserNameRef.on('value', snap => {
+              this.setState({
+              username: snap.val()
+                });
+              });  
       }
       doIntervalChange =() => {
         this.myInterval = setInterval(() => {
@@ -312,6 +314,8 @@ export default class OnTouchButton extends React.Component {
     }
 
     componentWillMount () {
+
+      //Firebase
       StatusBar.setHidden(false);
       const OnlineRef = firebase.database().ref('OnlineUser');
           const OnlineUserNumberRef = OnlineRef.child('Number');
@@ -352,27 +356,17 @@ export default class OnTouchButton extends React.Component {
             GameExist: snap.val() })
               });
 
-          /*    if (this.state.GameExist==1) {
-                if (this.state.StartedGame==0) {
-                firebase.database().ref('Game').update({
-                GameDescription: "'da başlayacak!"})
-              
-                }
-                else {
-                  this.setState({
-                    GameDescription: "'da başladı! Butonu sakın bırakma!"})
-                }
-               
-              }
-              
-              else{
-              }
-          */
-
     }
 }
 
 const styles = StyleSheet.create({
+  animatedView: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    position: 'absolute',
+    backgroundColor: 'steelblue',
+  },
   container: {
     flex: 1,
     backgroundColor: '#7654D2',
@@ -431,17 +425,11 @@ const styles = StyleSheet.create({
   },
 
   buttonstyle: {
-    height: 250,
+    height: 250 ,
     width: 250,
     backgroundColor: '#fff',
     borderColor: '#fff',
     borderRadius: 500,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  textstyle: {
-    color: 'white',
-    fontSize: 25,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -462,3 +450,52 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+/*
+      //DragAndDrop Start
+      state:
+            pan: new Animated.ValueXY(),
+      scale: new Animated.Value(1),
+
+      <Animated.View style={[styles.animatedView,
+        { transform: [
+          { scale: this.state.scale },
+          { translateX: this.state.pan.x },
+          { translateY: this.state.pan.y }
+        ] }]}
+        {...this._panResponder.panHandlers}
+        >
+
+      this._panResponder = PanResponder.create({
+        onMoveShouldSetResponderCapture: () => true,
+        onMoveShouldSetPanResponderCapture: () => true,
+        onPanResponderGrant: (evt, gestureState) => {
+  
+          this.state.pan.setOffset({
+            x: this.state.pan.x._value,
+            y: this.state.pan.y._value
+          }),
+  
+          this.state.pan.setValue({ x: 0, y: 0 });
+  
+          Animated.spring(
+            this.state.scale,
+            { toValue: 1.3, friction: 3 }
+          ).start()
+        },
+        onPanResponderMove: Animated.event([
+          //moving
+          null,
+          { dx: this.state.pan.x, dy: this.state.pan.y },
+        ]),
+        onPanResponderRelease: (evt, gestureState) => {
+          //call when stop moving release your finger
+          this.state.pan.flattenOffset();
+          Animated.spring(
+            this.state.scale,
+            { toValue: 1, friction: 3 }
+          ).start()
+          //this.setState({ win: false })
+        }
+      });
+      //DragAndDrop Finish
+*/
